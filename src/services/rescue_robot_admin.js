@@ -9,6 +9,7 @@ export function getTest() {
 export function postTest() {
 	return request({
 		url: "/post",
+		method: "post",
 		data: {
 			username: "admin",
 		},
