@@ -5,30 +5,3 @@ export function getTopBanners() {
 		url: "https://netease-cloud-music-api-mrshimmer.vercel.app/banner",
 	});
 }
-
-export function getHotRecommends(limit) {
-	return request({
-		url: "/personalized",
-		params: {
-			limit,
-		},
-	});
-}
-
-export function getNewAlbums(limit) {
-	return request({
-		url: "/top/album",
-		params: {
-			limit,
-		},
-	});
-}
-
-export function getTopList(id) {
-	return request({
-		url: "/playlist/detail",
-		params: {
-			id,
-		},
-	});
-}

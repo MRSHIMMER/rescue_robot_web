@@ -21,3 +21,13 @@ export function sendNavigationCommand() {
 		url: "/navigation",
 	});
 }
+
+export function sendNavigationCommand2(coordinate) {
+	return request({
+		url: "/navigation2",
+		method: "post",
+		data: {
+			coordinate,
+		},
+	});
+}
