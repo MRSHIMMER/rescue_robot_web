@@ -4,6 +4,7 @@ import { getTest, postTest, sendNavigationCommand } from "./services/rescue_robo
 
 async function getMusic() {
 	const res = await getTopBanners();
+	alert(res);
 	console.log(res);
 }
 
