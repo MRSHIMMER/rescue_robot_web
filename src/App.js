@@ -5,6 +5,7 @@ import {
 	postTest,
 	sendNavigationCommand,
 	sendNavigationCommand2,
+	sendPatrolCommand,
 } from "./services/rescue_robot_admin";
 
 async function getMusic() {
@@ -53,6 +54,7 @@ function App() {
 			</button>
 			<button onClick={sendNavigationCommand}>发送导航命令</button>
 			<button onClick={(e) => sendNavigationCommand2(coordinate)}>发送导航命令2</button>
+			<button onClick={sendPatrolCommand}>发送巡逻命令</button>
 			<button onClick={getMusic}>axios测试</button>
 		</div>
 	);

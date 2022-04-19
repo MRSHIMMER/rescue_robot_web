@@ -31,3 +31,9 @@ export function sendNavigationCommand2(coordinate) {
 		},
 	});
 }
+
+export function sendPatrolCommand() {
+	return request({
+		url: "/patrol",
+	});
+}
