@@ -55,7 +55,7 @@ function App() {
 			<button onClick={sendNavigationCommand}>发送导航命令</button>
 			<button onClick={(e) => sendNavigationCommand2(coordinate)}>发送导航命令2</button>
 			<button onClick={sendPatrolCommand}>发送巡逻命令</button>
-			<button onClick={getMusic}>axios测试</button>
+			<button onClick={getMusic}>axios测试连接</button>
 		</div>
 	);
 }
