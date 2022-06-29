@@ -5,7 +5,6 @@ import { getBanners, getTest, postTest } from "./utils/test";
 import {
   startSlam,
   stopSlam,
-  getItems,
   saveMap,
   loadMap,
   getMap,
@@ -18,12 +17,14 @@ import {
   startNavAdmin,
   addPatrolPoint,
   startPatrolAdmin,
+  change_keyboard_control,
 } from "./utils/func";
 import {
   test_command,
   start_move_command,
   stop_move_command,
   start_recognition_command,
+  stop_recognition_command,
 } from "./constants/data";
 
 // 定型以后有时间抽成组件
@@ -50,9 +51,11 @@ function App() {
             开始识别
           </button>
           <div className="blank"></div>
-          <button onClick={getItems}>读取结果</button>
+          <button onClick={(e) => sendCommandToRos(stop_recognition_command)}>
+            结束识别
+          </button>
         </div>
-        <div id="items"></div>
+        <div id="detect_items"></div>
         <h2 id="items_h2">物体识别</h2>
       </div>
 
@@ -86,7 +89,13 @@ function App() {
       </div>
       <div className="Grid">
         <div className="wrapper">
-          <div className="blank"></div>
+          <button
+            id="keyboard_control"
+            className="open_keyboard_control"
+            onClick={() => change_keyboard_control()}
+          >
+            打开键盘控制
+          </button>
           <button
             onClick={() => move_btn_click("forward")}
             onMouseDown={() => interval_btn("forward")}

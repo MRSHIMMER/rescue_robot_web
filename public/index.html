@@ -68,6 +68,32 @@
           //listener.unsubscribe();
         });
 
+        //监听spark物体识别信息
+        var listener2 = new ROSLIB.Topic({
+          ros: ros,
+          name: "/spark/detect_item",
+          messageType: "std_msgs/String",
+        });
+
+        var spark_detect_info_div = document.getElementById("spark_detect_item");
+        var spark_detect_items_div = document.getElementById("detect_items");
+        let spark_detect_items_arr = [];
+
+        listener2.subscribe(function (message) {
+          console.log("Received message on " + listener.name + ": " + message.data);
+
+          //在数组第一个位置插入，方便后续循环展示最新的消息
+          spark_detect_items_arr.splice(0, 0, message.data);
+          renderDetectItemInfo(spark_detect_items_arr, spark_detect_items_div);
+
+          //
+          spark_detect_info_div.innerText = String(message.data);
+          setTimeout(() => {
+            spark_detect_info_div.innerText = "";
+          }, 450);
+          //listener.unsubscribe();
+        });
+
         // Create the main viewer.
         var viewer1 = new ROS3D.Viewer({
           divID: "cur_map",
@@ -100,6 +126,7 @@
           rate: 10.0,
           //fixedFrame: "/xtion_link",
           fixedFrame: "/camera_link",
+          //fixedFrame: "/base_link",
           //serverName: "tf2_web_republisher",
         });
 
@@ -128,6 +155,7 @@
           rootObject: viewer2.scene,
           //topic: "/xtion/depth_registered/points",
           topic: "/camera/depth_registered/points",
+          //topic: "/rtabmap/mapData",
           //topic: "/kitti/velo/pointcloud",
           max_pts: 2000000,
           pointRatio: 3,
@@ -147,7 +175,7 @@
       function renderInfo(info_arr, renderDivParent) {
         if (info_arr.length > 50) {
           //删除部分消息
-          info_arr.splice(0, 25);
+          info_arr.splice(25, 25);
         }
         if (renderDivParent.hasChildNodes()) {
           renderDivParent.removeChild(renderDivParent.firstChild);
@@ -158,6 +186,33 @@
           let tempEle = document.createElement("li");
           tempEle.innerText = info;
           renderDiv.appendChild(tempEle);
+        }
+      }
+      function renderDetectItemInfo(info_arr, renderDivParent) {
+        if (info_arr.length > 50) {
+          //删除部分消息
+          info_arr.splice(25, 25);
+        }
+        if (renderDivParent.hasChildNodes()) {
+          renderDivParent.removeChild(renderDivParent.firstChild);
+        }
+        let renderDiv = document.createElement("div");
+        renderDivParent.appendChild(renderDiv);
+        for (let infoList of info_arr) {
+          infoListObj = JSON.parse(infoList);
+          for (let itemIndex in infoListObj) {
+            tempStr = "";
+            tempStr += "name:  ";
+            tempStr += infoListObj[itemIndex]["name"] + ", temp:  ";
+            tempStr += infoListObj[itemIndex]["temp"] + ", x:  ";
+            tempStr += infoListObj[itemIndex]["x"] + ", y:  ";
+            tempStr += infoListObj[itemIndex]["y"] + ", z:  ";
+            tempStr += infoListObj[itemIndex]["z"];
+            //console.log(tempStr);
+            let tempEle = document.createElement("li");
+            tempEle.innerText = tempStr;
+            renderDiv.appendChild(tempEle);
+          }
         }
       }
     </script>
@@ -213,5 +268,6 @@
     </div>
     <div class="BigGrid"><div id="pointcloud2" style="margin-top: 24px"></div></div>
     <div id="receive_admin_info" style="display: none"></div>
+    <div id="spark_detect_item" style="display: none"></div>
   </body>
 </html>

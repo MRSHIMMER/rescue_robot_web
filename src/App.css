@@ -82,12 +82,16 @@
   bottom: 0;
 } */
 
-#items {
+#detect_items {
   border: 1px solid black;
   margin-left: 10px;
   width: 318px;
   height: 120px;
   overflow: auto;
+  text-align: left;
+}
+#detect_items li {
+  margin-left: 10px;
 }
 
 /* 巡逻点 */
@@ -124,4 +128,12 @@
 }
 #info_display h2 {
   margin-top: 0px;
+}
+
+.open_keyboard_control {
+  background-color: chartreuse;
+}
+
+.close_keyboard_control {
+  background-color: red;
 }

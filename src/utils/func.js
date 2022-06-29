@@ -43,9 +43,12 @@ export async function stopSlam() {
 
   if (method === "rtab_map") {
     let savedMap = await getMapItemReq();
-    if (savedMap.indexOf(inputEle.value) !== -1) {
-      alert("结束rtabmap slam失败!  已保存同名的地图文件，请更换名字后重试!  ");
-      return;
+    console.log(savedMap.mapitems);
+    for (let mapname_temp of savedMap.mapitems) {
+      if (mapname_temp === inputEle.value + ".db") {
+        alert("结束rtabmap slam失败!  已保存同名的地图文件，请更换名字后重试!  ");
+        return;
+      }
     }
   }
   sendCommandToRos(stopslam_command);
@@ -261,11 +264,13 @@ export function clear_interval() {
   // clearInterval(keyObj);
 }
 
+//有问题，很多时候定时器还存在
 //3、按住键盘wasde
 // 因为定时器间隔的关系，短时间连续单次点击键盘方向键可能会不发出命令
 let keyArr = ["w", "a", "d", "s", "e"];
 let keyControlFlag = "";
 let keyTime = false;
+let keyboardFlag = false;
 setInterval(() => {
   if (keyTime) {
     if (keyControlFlag === "w") {
@@ -279,11 +284,13 @@ setInterval(() => {
   }
 }, 250);
 document.onkeydown = (event) => {
-  keyTime = true;
-  for (let key of keyArr) {
-    if (event.key === key) {
-      // console.log(key + "方向键按下");
-      keyControlFlag = key;
+  if (keyboardFlag) {
+    keyTime = true;
+    for (let key of keyArr) {
+      if (event.key === key) {
+        // console.log(key + "方向键按下");
+        keyControlFlag = key;
+      }
     }
   }
 };
@@ -297,6 +304,18 @@ document.onkeyup = (event) => {
   }
 };
 //TODO  松开按键，则发送cmd_vel 0
+
+export function change_keyboard_control() {
+  let keyboardControlEle = document.getElementById("keyboard_control");
+  keyboardFlag = !keyboardFlag;
+  if (keyboardFlag) {
+    keyboardControlEle.className = "close_keyboard_control";
+    keyboardControlEle.innerText = "关闭键盘控制";
+  } else {
+    keyboardControlEle.className = "open_keyboard_control";
+    keyboardControlEle.innerText = "打开键盘控制";
+  }
+}
 
 export function initial_pose_func() {
   let positionEle = document.getElementById("initial_pose");

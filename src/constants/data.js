@@ -100,6 +100,14 @@ export const start_recognition_command = {
   },
 };
 
+export const stop_recognition_command = {
+  code: 1,
+  type: "recognition",
+  params: {
+    action: "stopRecognition",
+  },
+};
+
 export const get_items_command = {
   code: 1,
   type: "recognition",
