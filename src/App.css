@@ -6,6 +6,7 @@
   height: 250px;
   margin: 10px 10px;
 }
+
 #slam_grid {
   text-align: center;
   float: left;
@@ -113,7 +114,7 @@
   float: left;
   border: 1px solid black;
   width: 700px;
-  height: 250px;
+  height: 700px;
   margin: 10px 10px;
 }
 
@@ -121,13 +122,19 @@
   border: 1px solid black;
   margin-left: 10px;
   width: 680px;
-  height: 190px;
+  height: 650px;
   margin-top: 10px;
   margin-bottom: 5px;
   overflow: auto;
+  font-size: 15px;
+  text-align: left;
 }
 #info_display h2 {
   margin-top: 0px;
+}
+
+#info_items li {
+  margin-left: 10px;
 }
 
 .open_keyboard_control {
@@ -136,4 +143,20 @@
 
 .close_keyboard_control {
   background-color: red;
+}
+
+.feedback-info-type0 {
+  color: #000000;
+}
+.feedback-info-type1 {
+  color: #9a32cd;
+}
+.feedback-info-type2 {
+  color: #4169e1;
+}
+.feedback-info-type3 {
+  color: #d2691e;
+}
+.feedback-info-type4 {
+  color: #ffd700;
 }
