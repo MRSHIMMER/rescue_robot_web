@@ -7,7 +7,7 @@
     <meta name="description" content="Web site created using create-react-app" />
     <title>rescue_robot_web</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="./css/rwt_nav.css" />
+    <link rel="stylesheet" type="text/css" href="./css/basic.css" />
 
     <!-- <script src="https://static.robotwebtools.org/roslibjs/current/roslib.js"></script> -->
     <!-- <script src="https://static.robotwebtools.org/threejs/current/three.js"></script> -->
@@ -54,14 +54,25 @@
         let info_item_arr = [];
 
         listener.subscribe(function (message) {
-          console.log("Received message on " + listener.name + ": " + message.data);
+          message.data = message.data.replace(/\\/g, "");
+          message.data = message.data.replace(/""/g, '"');
+
+          message.data = JSON.parse(message.data);
+          console.log(message.data);
+          console.log(
+            "Location: " + message.data.location + " ; Content: " + message.data.content
+          );
 
           //在数组第一个位置插入，方便后续循环展示最新的消息
-          info_item_arr.splice(0, 0, message.data);
+          info_item_arr.splice(
+            0,
+            0,
+            "info-type" + String(message.data.type) + message.data.content
+          );
           renderInfo(info_item_arr, info_item_div);
 
           //
-          info_div.innerText = String(message.data);
+          info_div.innerText = String(message.data.content);
           setTimeout(() => {
             info_div.innerText = "";
           }, 450);
@@ -92,6 +103,22 @@
             spark_detect_info_div.innerText = "";
           }, 450);
           //listener.unsubscribe();
+        });
+
+        //监听行为树信息
+        var behaviorTreeListener = new ROSLIB.Topic({
+          ros: ros,
+          name: "/send_behavior_tree_info2_web",
+          messageType: "std_msgs/String",
+        });
+
+        var behaviorTreeInfoEle = document.getElementById("behavior_tree_info");
+
+        behaviorTreeListener.subscribe(function (message) {
+          console.log(
+            "Received message on " + behaviorTreeListener.name + ": " + message.data
+          );
+          behaviorTreeInfoEle.innerText = message.data;
         });
 
         // Create the main viewer.
@@ -184,6 +211,11 @@
         renderDivParent.appendChild(renderDiv);
         for (let info of info_arr) {
           let tempEle = document.createElement("li");
+          if (String(info.slice(0, 9)) === "info-type") {
+            tempEle.classList.add("feedback-" + String(info.slice(0, 10)));
+
+            info = info.slice(10);
+          }
           tempEle.innerText = info;
           renderDiv.appendChild(tempEle);
         }
@@ -221,8 +253,13 @@
     <!-- <body> -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <div class="container"></div>
-    <div class="BigGrid">
+    <div id="tree_wrap">
+      <div id="behavior_tree_display"></div>
+      <h2>行为树</h2>
+    </div>
+
+    <!-- <div class="container"></div> -->
+    <div class="NavBigGrid">
       <div class="container" id="setting_button">
         <span id="config-button"></span>
       </div>
@@ -230,13 +267,14 @@
         type="text"
         id="position_input"
         placeholder="获取到的坐标信息"
-        style="margin-top: 10px; height: 34px"
+        style="margin-top: 10px; height: 34px; float: right; margin-right: 15px"
       />
       <div id="nav_map">
-        <div id="map" style="width: 520px; margin-left: 78px; margin-top: 54px"></div>
+        <!-- <div id="map" style="width: 520px; margin-left: 78px; margin-top: 54px"></div> -->
+        <div id="map" style="width: 320px; margin-left: 10px; margin-top: 54px"></div>
       </div>
     </div>
-    <div class="BigGrid">
+    <div class="NavBigGrid" style="margin-left: 0">
       <div id="topic-area">
         <div class="container">
           <form id="image-topic-form" role="form" class="form-inline">
@@ -245,21 +283,31 @@
               <select
                 id="image-topic-select"
                 class="form-control"
-                style="width: 120px; height: 34px"
+                style="width: 180px; height: 34px; margin-top: 10px"
               ></select>
             </div>
             <button
               type="submit"
               class="btn btn-primary"
-              style="height: 34px; width: 50px; margin-top: 10px; font-size: 10px"
+              style="
+                height: 34px;
+                width: 50px;
+                margin-top: 10px;
+                font-size: 10px;
+                float: left;
+              "
             >
               view
             </button>
           </form>
         </div>
-        <div
+        <!-- <div
           id="canvas-area"
           style="width: 520px; margin-left: 78px; margin-top: 54px"
+        ></div> -->
+        <div
+          id="canvas-area"
+          style="width: 320px; margin-left: 10px; margin-top: 10px"
         ></div>
       </div>
     </div>
@@ -269,5 +317,9 @@
     <div class="BigGrid"><div id="pointcloud2" style="margin-top: 24px"></div></div>
     <div id="receive_admin_info" style="display: none"></div>
     <div id="spark_detect_item" style="display: none"></div>
+    <div id="behavior_tree_info" style="display: none">
+      { "name": "spark", "status": 1, "children": [ { "name": "灭火", "children": [ {
+      "name": "导航"}]}]}
+    </div>
   </body>
 </html>

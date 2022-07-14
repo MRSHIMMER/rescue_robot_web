@@ -1,7 +1,4 @@
-// import { getTopBanners, getReq, postReq } from "../services/rescue_robot_admin";
-
-//测试
-// export async function getTest() {
+export async function getTest() {
 //   const rep = await getReq();
 //   alert(rep);
 //   console.log(rep);
@@ -18,9 +15,3 @@
 //   else alert("axios请求测试错误");
 //   console.log(res);
 // }
-
-// let teststr = 'sdss\\ss"dsa';
-// let reg = /\\/g;
-// let test = teststr.replace(reg, "");
-// console.log(teststr);
-// console.log(test);

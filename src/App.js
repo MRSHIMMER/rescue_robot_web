@@ -149,6 +149,7 @@ function App() {
         <div id="points"></div>
         <h2>救援任务</h2>
       </div>
+      <div className="Grid" style={{ visibility: "hidden" }}></div>
       <div className="Grid" id="info_display">
         <div id="info_items"></div>
         <h2>反馈信息</h2>
