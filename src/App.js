@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { sendCommandToRos } from "./services/rescue_robot_admin";
+import { sendCommandToSpark } from "./services/rescue_robot_admin";
 import { getBanners, getTest, postTest } from "./utils/test";
 import {
   startSlam,
@@ -14,10 +14,10 @@ import {
   move_btn_click,
   initial_pose_func,
   stopNav,
-  startNavAdmin,
   addPatrolPoint,
   startPatrolAdmin,
   change_keyboard_control,
+  addTestItem,
 } from "./utils/func";
 import {
   test_command,
@@ -36,7 +36,7 @@ function App() {
           <button onClick={getTest}>get请求跨域</button>
           <button onClick={postTest}>post请求跨域</button>
           <button onClick={getBanners}>axios测试连接</button>
-          <button onClick={(e) => sendCommandToRos(test_command)}>发送命令测试</button>
+          <button onClick={(e) => sendCommandToSpark(test_command)}>发送命令测试</button>
           <button onClick={getMap}>获取地图</button>
           <div className="blank"></div>
           <div className="blank"></div>
@@ -47,11 +47,11 @@ function App() {
       </div>
       <div className="Grid" id="recognition_grid">
         <div className="wrapper" id="recognition_wrapper">
-          <button onClick={(e) => sendCommandToRos(start_recognition_command)}>
+          <button onClick={(e) => sendCommandToSpark(start_recognition_command)}>
             开始识别
           </button>
           <div className="blank"></div>
-          <button onClick={(e) => sendCommandToRos(stop_recognition_command)}>
+          <button onClick={(e) => sendCommandToSpark(stop_recognition_command)}>
             结束识别
           </button>
         </div>
@@ -125,7 +125,9 @@ function App() {
           >
             右
           </button>
-          <button onClick={(e) => sendCommandToRos(start_move_command)}>连接控制</button>
+          <button onClick={(e) => sendCommandToSpark(start_move_command)}>
+            连接控制
+          </button>
           <button
             onClick={() => move_btn_click("back")}
             onMouseDown={() => interval_btn("back")}
@@ -133,14 +135,14 @@ function App() {
           >
             后
           </button>
-          <button onClick={(e) => sendCommandToRos(stop_move_command)}>断开控制</button>
+          <button onClick={(e) => sendCommandToSpark(stop_move_command)}>断开控制</button>
         </div>
         <h2>移动控制</h2>
       </div>
       <div className="Grid">
         <div className="wrapper">
-          <input type="text" id="admin_nav_x_y_r" placeholder="x/y/r" />
-          <button onClick={startNavAdmin}>开始导航</button>
+          <input type="text" id="add_test_item" placeholder="x/y/r/temp/name" />
+          <button onClick={addTestItem}>添加测试物品</button>
           <button onClick={() => console.log("todo")}>停止巡逻</button>
           <input type="text" id="patrol_x_y_r" placeholder="x/y/r" />
           <button onClick={addPatrolPoint}>添加巡逻点</button>

@@ -1,8 +1,9 @@
 import {
-  sendCommandToRos,
+  sendCommandToSpark,
   sendCommandToAdmin,
   getItemReq,
   getMapItemReq,
+  addTestItemCommand,
 } from "../services/rescue_robot_admin";
 import {
   start_slam_command,
@@ -28,7 +29,7 @@ export function startSlam() {
   let method = slamselect.options[slamindex].value;
   let slam_command = start_slam_command;
   slam_command.params.slammethod = method;
-  sendCommandToRos(slam_command);
+  sendCommandToSpark(slam_command);
 }
 
 export async function stopSlam() {
@@ -51,12 +52,12 @@ export async function stopSlam() {
       }
     }
   }
-  sendCommandToRos(stopslam_command);
+  sendCommandToSpark(stopslam_command);
 }
 
 export async function getItems() {
   let rep = await getItemReq();
-  // let rep = await sendCommandToRos(get_items_command);
+  // let rep = await sendCommandToSpark(get_items_command);
   // let rep = {
   // 	items: [
   // 		{ name: "item1", x: 0, y: 0 },
@@ -122,7 +123,7 @@ export async function saveMap() {
     (savedMap.mapitems && savedMap.mapitems.length === 0)
   ) {
     console.log("maps空 直接保存");
-    sendCommandToRos(save_command);
+    sendCommandToSpark(save_command);
   } else {
     for (let mapname of savedMap.mapitems) {
       if (mapname === temp) {
@@ -131,7 +132,7 @@ export async function saveMap() {
       }
     }
     console.log("maps非空 且无同名 保存");
-    sendCommandToRos(save_command);
+    sendCommandToSpark(save_command);
   }
 }
 
@@ -163,7 +164,7 @@ export async function loadMap() {
   let map_name = mapEle.options[slamindex].value;
   let map_command = load_map_command;
   map_command.params.mapname = map_name;
-  sendCommandToRos(map_command);
+  sendCommandToSpark(map_command);
 }
 
 export function startNav() {
@@ -173,7 +174,7 @@ export function startNav() {
   nav_command.params.y = x_y_inputEle.value.split("/")[1];
   nav_command.params.r = x_y_inputEle.value.split("/")[2];
   // nav_command.params.w = x_y_inputEle.value.split("/")[3];
-  sendCommandToRos(nav_command);
+  sendCommandToSpark(nav_command);
 }
 
 export function startNavAdmin() {
@@ -194,6 +195,16 @@ export function addPatrolPoint() {
   point.r = x_y_inputEle.value.split("/")[2];
   PatrolPoints.push(point);
   renderPointsList();
+}
+
+export function addTestItem() {
+  let itemInputEle = document.getElementById("add_test_item");
+  let item = { x: 0, y: 0, z: 0, temp: 0, subClass: "" };
+  item.x = itemInputEle.value.split("/")[0];
+  item.y = itemInputEle.value.split("/")[1];
+  item.temp = itemInputEle.value.split("/")[3];
+  item.subClass = itemInputEle.value.split("/")[4];
+  addTestItemCommand(item);
 }
 
 function renderPointsList() {
@@ -227,7 +238,7 @@ export function startPatrolAdmin() {
 }
 
 export function stopNav() {
-  sendCommandToRos(stop_nav_command);
+  sendCommandToSpark(stop_nav_command);
 }
 
 // 前后左右按钮的控制逻辑
@@ -235,12 +246,12 @@ export function stopNav() {
 export function move_btn_click(moveFlag) {
   if (moveFlag === "forward") {
     // console.log("前进");
-    sendCommandToRos(forward_command);
+    sendCommandToSpark(forward_command);
   }
-  if (moveFlag === "left") sendCommandToRos(left_command);
-  if (moveFlag === "right") sendCommandToRos(right_command);
-  if (moveFlag === "back") sendCommandToRos(back_command);
-  if (moveFlag === "stop") sendCommandToRos(stop_command);
+  if (moveFlag === "left") sendCommandToSpark(left_command);
+  if (moveFlag === "right") sendCommandToSpark(right_command);
+  if (moveFlag === "back") sendCommandToSpark(back_command);
+  if (moveFlag === "stop") sendCommandToSpark(stop_command);
 }
 
 let timeObj;
@@ -250,12 +261,12 @@ export function interval_btn(moveFlag) {
   timeObj = setInterval(() => {
     if (moveFlag === "forward") {
       console.log("前进");
-      sendCommandToRos(forward_command);
+      sendCommandToSpark(forward_command);
     }
-    if (moveFlag === "left") sendCommandToRos(left_command);
-    if (moveFlag === "right") sendCommandToRos(right_command);
-    if (moveFlag === "back") sendCommandToRos(back_command);
-    if (moveFlag === "stop") sendCommandToRos(stop_command);
+    if (moveFlag === "left") sendCommandToSpark(left_command);
+    if (moveFlag === "right") sendCommandToSpark(right_command);
+    if (moveFlag === "back") sendCommandToSpark(back_command);
+    if (moveFlag === "stop") sendCommandToSpark(stop_command);
   }, 250);
 }
 export function clear_interval() {
@@ -264,6 +275,7 @@ export function clear_interval() {
   // clearInterval(keyObj);
 }
 
+// 曾丢失过代码，还未测试以下代码是否又缺陷
 //有问题，很多时候定时器还存在
 //3、按住键盘wasde
 // 因为定时器间隔的关系，短时间连续单次点击键盘方向键可能会不发出命令
@@ -275,12 +287,12 @@ setInterval(() => {
   if (keyTime) {
     if (keyControlFlag === "w") {
       console.log("前进");
-      sendCommandToRos(forward_command);
+      sendCommandToSpark(forward_command);
     }
-    if (keyControlFlag === "a") sendCommandToRos(left_command);
-    if (keyControlFlag === "d") sendCommandToRos(right_command);
-    if (keyControlFlag === "s") sendCommandToRos(back_command);
-    if (keyControlFlag === "e") sendCommandToRos(stop_command);
+    if (keyControlFlag === "a") sendCommandToSpark(left_command);
+    if (keyControlFlag === "d") sendCommandToSpark(right_command);
+    if (keyControlFlag === "s") sendCommandToSpark(back_command);
+    if (keyControlFlag === "e") sendCommandToSpark(stop_command);
   }
 }, 250);
 document.onkeydown = (event) => {
@@ -337,5 +349,5 @@ export function initial_pose_func() {
   console.log(pose);
   let pose_command = initial_pose_command;
   pose_command.params.pose = pose;
-  sendCommandToRos(pose_command);
+  sendCommandToSpark(pose_command);
 }

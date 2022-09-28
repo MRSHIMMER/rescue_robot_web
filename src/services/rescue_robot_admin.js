@@ -17,9 +17,9 @@ export function postReq() {
   });
 }
 
-export function sendCommandToRos(command) {
+export function sendCommandToSpark(command) {
   return request({
-    url: "/sendcommand",
+    url: "/sendcommand2spark",
     method: "post",
     data: {
       command,
@@ -33,6 +33,16 @@ export function sendCommandToAdmin(command) {
     method: "post",
     data: {
       command,
+    },
+  });
+}
+
+export function addTestItemCommand(item) {
+  return request({
+    url: "/addtestitem",
+    method: "post",
+    data: {
+      item,
     },
   });
 }

@@ -234,8 +234,8 @@
           infoListObj = JSON.parse(infoList);
           for (let itemIndex in infoListObj) {
             tempStr = "";
-            tempStr += "name:  ";
-            tempStr += infoListObj[itemIndex]["name"] + ", temp:  ";
+            tempStr += "subClass:  ";
+            tempStr += infoListObj[itemIndex]["subClass"] + ", temp:  ";
             tempStr += infoListObj[itemIndex]["temp"] + ", x:  ";
             tempStr += infoListObj[itemIndex]["x"] + ", y:  ";
             tempStr += infoListObj[itemIndex]["y"] + ", z:  ";
@@ -317,9 +317,7 @@
     <div class="BigGrid"><div id="pointcloud2" style="margin-top: 24px"></div></div>
     <div id="receive_admin_info" style="display: none"></div>
     <div id="spark_detect_item" style="display: none"></div>
-    <div id="behavior_tree_info" style="display: none">
-      { "name": "spark", "status": 1, "children": [ { "name": "灭火", "children": [ {
-      "name": "导航"}]}]}
-    </div>
+    <div id="behavior_tree_info" style="display: none"></div>
+    <!-- { "name": "spark", "status": 1, "children": [ { "name": "灭火", "children": [ {"name": "导航"}]}]} -->
   </body>
 </html>

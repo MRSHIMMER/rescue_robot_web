@@ -153,7 +153,7 @@ const graph = new G6.TreeGraph({
   },
   layout: {
     type: "compactBox",
-    direction: "LR",
+    direction: "TB",
     getId: function getId(d) {
       return d.id;
     },
